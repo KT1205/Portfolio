@@ -1,0 +1,217 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 998;
+}
+
+.terminalWrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    /* transform handled by framer-motion */
+    width: 90%;
+    max-width: 700px;
+    height: 60vh;
+    min-height: 400px;
+    background: #0b0b0f;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    z-index: 999;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 245, 212, 0.05);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.terminalHeader {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    cursor: default;
+}
+
+.termDots {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.termDots button {
+    border: none;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+
+.termDots button:hover {
+    filter: brightness(1.2);
+}
+
+.dotRed {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ff5f56;
+}
+
+.dotYellow {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ffbd2e;
+}
+
+.dotGreen {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #27c93f;
+}
+
+.termTitle {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    opacity: 0.7;
+}
+
+.terminalWindow {
+    flex-grow: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    cursor: text;
+}
+
+.historyList {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.line {
+    word-break: break-all;
+    line-height: 1.4;
+    white-space: pre-wrap;
+}
+
+.user {
+    color: var(--text-main);
+    font-weight: bold;
+}
+
+.system {
+    color: var(--text-dim);
+}
+
+.error {
+    color: #ff5f56;
+}
+
+.link {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 5px rgba(0, 245, 212, 0.5);
+}
+
+.success {
+    color: #27c93f;
+}
+
+.inputRow {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.promptArrow {
+    color: var(--accent-cyan);
+    font-weight: bold;
+}
+
+.cmdInput {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    flex-grow: 1;
+    outline: none;
+    caret-color: transparent;
+    /* Hide native cursor for custom block cursor */
+}
+
+.cursorBlock {
+    width: 8px;
+    height: 1.2rem;
+    background: var(--accent-purple);
+    animation: blinkCursor 1s step-end infinite;
+    position: absolute;
+    left: calc(2ch + (1ch * var(--input-length, 0)));
+    /* dynamic fallback usually handled by JS or simple align */
+    pointer-events: none;
+}
+
+/* Fallback simple right-align cursor if input gets long */
+.cmdInput:focus+.cursorBlock {
+    left: auto;
+    right: 0;
+    opacity: 0;
+    /* Let native caret handle it if too complex, or keep simple block */
+}
+
+.cmdInput {
+    caret-color: var(--accent-purple);
+    /* Revert to standard caret for robust typing */
+}
+
+.cursorBlock {
+    display: none;
+    /* Hide custom block if using caret */
+}
+
+/* Let's construct a purely CSS trailing block cursor on focus-within if we can, 
+   otherwise native block caret is better via font */
+
+@keyframes blinkCursor {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+[data-theme='light'] .terminalWrapper {
+    background: #111;
+    /* Keep terminal dark even in light mode for dev feel */
+}
+
+@media (max-width: 1024px) {
+    .terminalWrapper {
+        width: 90%;
+    }
+}
+
+@media (max-width: 640px) {
+    .terminalWrapper {
+        width: 95vw;
+        height: 60vh;
+        min-height: auto;
+    }
+}
