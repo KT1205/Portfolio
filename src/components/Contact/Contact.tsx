@@ -4,16 +4,35 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import styles from "./Contact.module.css";
 import { portfolioData } from "@/data/portfolio";
-import { Mail, Github, Linkedin, Copy, CheckCircle2 } from "lucide-react";
+import { Mail, Github, Linkedin, CheckCircle2 } from "lucide-react";
 
 export default function Contact() {
     const customEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(portfolioData.email);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        if (typeof navigator !== 'undefined' && navigator.clipboard) {
+            navigator.clipboard.writeText(portfolioData.email).then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        } else {
+            // Fallback for older browsers or non-secure contexts
+            const textArea = document.createElement("textarea");
+            textArea.value = portfolioData.email;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            } catch (err) {
+                console.error('Fallback copy failed', err);
+            }
+            document.body.removeChild(textArea);
+        }
     };
 
     return (
@@ -35,13 +54,20 @@ export default function Contact() {
                 </h2>
 
                 <div className={styles.commsGrid}>
-                    <div className={styles.commCardHoverlessRow}>
+                    <div
+                        className={styles.commCardEmail}
+                        onClick={handleCopy}
+                        title="Click to copy email"
+                    >
                         <div className={styles.commIconWrapper}>
-                            <Mail size={24} />
+                            {copied ? <CheckCircle2 size={24} className={styles.successIcon} /> : <Mail size={24} />}
                         </div>
                         <div className={styles.commDetails}>
-                            <span className={styles.commLabel}>SECURE_EMAIL</span>
+                            <span className={styles.commLabel}>{copied ? 'SYSTEM_COPIED' : 'SECURE_EMAIL'}</span>
                             <span className={styles.commValue}>{portfolioData.email}</span>
+                        </div>
+                        <div className={`${styles.copyHint} ${copied ? styles.hintActive : ''}`}>
+                            {copied ? 'COPIED!' : 'CLICK TO COPY'}
                         </div>
                     </div>
 
@@ -64,16 +90,6 @@ export default function Contact() {
                             <span className={styles.commValue}>Kalp Thekdi</span>
                         </div>
                     </a>
-
-                    <div className={styles.commCardHoverless}>
-                        <div className={styles.commDetails}>
-                            <span className={styles.commLabel}>COPY_EMAIL_ADDRESS</span>
-                        </div>
-                        <button className={styles.copyBtn} onClick={handleCopy}>
-                            {copied ? <CheckCircle2 size={18} className={styles.successIcon} /> : <Copy size={18} />}
-                            <span>{copied ? 'COPIED TO CLIPBOARD' : 'COPY TO CLIPBOARD'}</span>
-                        </button>
-                    </div>
                 </div>
 
             </motion.div>

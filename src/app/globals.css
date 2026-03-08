@@ -70,7 +70,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: var(--font-body);
-  transition: background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.3s ease;
+  /* Faster transition for perceived smoothness */
   height: 100%;
   width: 100%;
   overflow: hidden;
@@ -270,12 +271,11 @@ h6,
 /* Glassmorphic Futuristic Global Button */
 .btn-primary {
   position: relative;
-  padding: 1.2rem 3rem;
+  padding: 0.8rem 2.2rem;
   color: var(--text-main);
-  border-radius: 5px;
-  /* sharper, more futuristic */
+  border-radius: 4px;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-family: var(--font-heading);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -284,11 +284,12 @@ h6,
   justify-content: center;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
+  /* Reduced for Chrome performance */
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn-primary::before {

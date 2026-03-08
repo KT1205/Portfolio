@@ -9,37 +9,36 @@ export default function EnvironmentLayer() {
     const { theme } = useTheme();
 
     const [isActive, setIsActive] = useState(false);
-    const [isMobile, setIsMobile] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         const checkMobile = () => {
-            const mobile = window.innerWidth < 900;
-            const lowPower = (navigator.hardwareConcurrency || 4) < 4;
-            setIsMobile(mobile || lowPower);
+            const mobile = window.innerWidth < 768;
+            setIsMobile(mobile);
         };
         checkMobile();
         window.addEventListener("resize", checkMobile, { passive: true });
-        // Defer rendering until active
-        setTimeout(() => setIsActive(true), 100);
-        return () => window.removeEventListener("resize", checkMobile);
+
+        const timer = setTimeout(() => setIsActive(true), 200);
+        return () => {
+            window.removeEventListener("resize", checkMobile);
+            clearTimeout(timer);
+        };
     }, []);
 
     useEffect(() => {
         if (!isActive || isMobile) return;
 
-        // --- Particle & Mouse Logic ---
         const canvas = canvasRef.current;
-        const grid = gridRef.current;
         if (!canvas) return;
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { alpha: false });
         if (!ctx) return;
 
         let particlesArray: Particle[] = [];
-        let animationFrameId: number = 0;
+        let animationFrameId: number;
         let isScrolling = false;
         let scrollTimeout: NodeJS.Timeout;
 
-        // Smooth mouse following for parallax
         const mouse = {
             targetX: 0,
             targetY: 0,
@@ -55,20 +54,10 @@ export default function EnvironmentLayer() {
             init();
         };
 
-        let mouseRaf: number;
         const handleMouseMove = (event: MouseEvent) => {
-            if (mouseRaf) cancelAnimationFrame(mouseRaf);
-            mouseRaf = requestAnimationFrame(() => {
-                mouse.targetX = (event.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
-                mouse.targetY = (event.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
-                mouse.active = true;
-            });
-        };
-
-        const handleMouseLeave = () => {
-            mouse.targetX = 0;
-            mouse.targetY = 0;
-            mouse.active = false;
+            mouse.targetX = (event.clientX / window.innerWidth - 0.5) * 2;
+            mouse.targetY = (event.clientY / window.innerHeight - 0.5) * 2;
+            mouse.active = true;
         };
 
         const handleScroll = () => {
@@ -76,23 +65,18 @@ export default function EnvironmentLayer() {
             clearTimeout(scrollTimeout);
             scrollTimeout = setTimeout(() => {
                 isScrolling = false;
-            }, 150);
+            }, 100);
         };
 
         window.addEventListener("resize", handleResize, { passive: true });
         window.addEventListener("mousemove", handleMouseMove, { passive: true });
-        window.addEventListener("mouseleave", handleMouseLeave, { passive: true });
-        window.addEventListener("scroll", handleScroll, { passive: true, capture: true });
+        window.addEventListener("scroll", handleScroll, { passive: true });
 
         class Particle {
-            x: number;
-            y: number;
-            directionX: number;
-            directionY: number;
-            size: number;
-            alpha: number;
-            zOffset: number; // For faux 3D parallax
-            themeColor: string;
+            x: number; y: number;
+            directionX: number; directionY: number;
+            size: number; alpha: number; zOffset: number;
+            color: string;
 
             constructor(x: number, y: number, directionX: number, directionY: number, size: number) {
                 const isLight = document.documentElement.getAttribute("data-theme") === "light";
@@ -101,32 +85,31 @@ export default function EnvironmentLayer() {
                 this.directionX = directionX;
                 this.directionY = directionY;
                 this.size = size;
-                this.alpha = Math.random() * 0.5 + 0.1;
-                this.zOffset = Math.random() * 2 + 0.5; // distance depth
-                this.themeColor = isLight ? `rgba(0, 70, 243, ${this.alpha})` : `rgba(0, 245, 212, ${this.alpha})`;
+                this.alpha = Math.random() * 0.4 + 0.1;
+                this.zOffset = Math.random() * 1.5 + 0.5;
+                this.color = isLight ? `rgba(0, 112, 243, ${this.alpha})` : `rgba(0, 245, 212, ${this.alpha})`;
             }
 
             draw() {
                 if (!ctx) return;
-                ctx.beginPath();
-                // Apply parallax translation based on mouse
-                const px = this.x - mouse.currentX * 30 * this.zOffset;
-                const py = this.y - mouse.currentY * 30 * this.zOffset;
+                const px = this.x - mouse.currentX * 15 * this.zOffset;
+                const py = this.y - mouse.currentY * 15 * this.zOffset;
 
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
                 ctx.arc(px, py, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.themeColor;
                 ctx.fill();
             }
 
             update() {
                 if (!canvas) return;
-                if (this.x > canvas.width + 100) this.x = -100;
-                if (this.x < -100) this.x = canvas.width + 100;
-                if (this.y > canvas.height + 100) this.y = -100;
-                if (this.y < -100) this.y = canvas.height + 100;
-
                 this.x += this.directionX;
                 this.y += this.directionY;
+
+                if (this.x > canvas.width + 50) this.x = -50;
+                else if (this.x < -50) this.x = canvas.width + 50;
+                if (this.y > canvas.height + 50) this.y = -50;
+                else if (this.y < -50) this.y = canvas.height + 50;
 
                 this.draw();
             }
@@ -135,14 +118,14 @@ export default function EnvironmentLayer() {
         function init() {
             if (!canvas) return;
             particlesArray = [];
-            const numberOfParticles = 35; // Optimized for performance
-            for (let i = 0; i < numberOfParticles; i++) {
-                const size = Math.random() * 1.5 + 0.5;
+            const count = 30;
+            for (let i = 0; i < count; i++) {
+                const size = Math.random() * 1.2 + 0.3;
                 const x = Math.random() * canvas.width;
                 const y = Math.random() * canvas.height;
-                const directionX = (Math.random() * 0.4) - 0.2;
-                const directionY = -Math.abs(Math.random() * 0.3 + 0.1); // Always float upwards slightly
-                particlesArray.push(new Particle(x, y, directionX, directionY, size));
+                const dx = (Math.random() * 0.2) - 0.1;
+                const dy = (Math.random() * 0.2) - 0.1;
+                particlesArray.push(new Particle(x, y, dx, dy, size));
             }
         }
 
@@ -150,19 +133,18 @@ export default function EnvironmentLayer() {
             animationFrameId = requestAnimationFrame(animate);
             if (!ctx || !canvas || isScrolling) return;
 
-            // Lerp mouse
+            ctx.fillStyle = theme === 'dark' ? '#050508' : '#f0f2f5';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
             mouse.currentX += (mouse.targetX - mouse.currentX) * 0.05;
             mouse.currentY += (mouse.targetY - mouse.currentY) * 0.05;
 
-            // Parallax the Grid Background
             if (gridRef.current) {
-                // translate by up to 20px based on mouse
-                const gx = mouse.currentX * -20;
-                const gy = mouse.currentY * -20;
-                gridRef.current.style.transform = `perspective(800px) rotateX(60deg) translateY(100px) translateZ(-200px) translate(${gx}px, ${gy}px)`;
+                const gx = mouse.currentX * -10;
+                const gy = mouse.currentY * -10;
+                gridRef.current.style.transform = `perspective(1000px) rotateX(60deg) translate3d(${gx}px, ${gy}px, 0)`;
             }
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < particlesArray.length; i++) {
                 particlesArray[i].update();
             }
@@ -174,59 +156,69 @@ export default function EnvironmentLayer() {
         return () => {
             window.removeEventListener("resize", handleResize);
             window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseleave", handleMouseLeave);
-            window.removeEventListener("scroll", handleScroll, { capture: true });
+            window.removeEventListener("scroll", handleScroll);
             cancelAnimationFrame(animationFrameId);
-            if (mouseRaf) cancelAnimationFrame(mouseRaf);
         };
     }, [theme, isActive, isMobile]);
-
-    if (isMobile) {
-        return (
-            <div style={{
-                position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
-                zIndex: -10, backgroundColor: "var(--bg-main)"
-            }} />
-        );
-    }
 
     return (
         <div style={{
             position: "fixed",
-            top: 0, left: 0,
-            width: "100vw", height: "100vh",
+            inset: 0,
             zIndex: -10,
             overflow: "hidden",
             pointerEvents: "none",
             backgroundColor: "var(--bg-main)"
         }}>
-            {/* Dynamic Perspective Grid */}
             <div
                 ref={gridRef}
                 style={{
                     position: "absolute",
-                    bottom: "-20%",
-                    left: "-20%",
-                    width: "140%",
-                    height: "80vh",
+                    bottom: "-10%",
+                    left: "-10%",
+                    width: "120%",
+                    height: "60vh",
                     backgroundImage: `
-                        linear-gradient(to right, rgba(0, 245, 212, 0.05) 1px, transparent 1px),
-                        linear-gradient(to top, rgba(0, 245, 212, 0.05) 1px, transparent 1px)
+                        linear-gradient(to right, rgba(0, 245, 212, ${isMobile ? 0.03 : 0.05}) 1px, transparent 1px),
+                        linear-gradient(to top, rgba(0, 245, 212, ${isMobile ? 0.03 : 0.05}) 1px, transparent 1px)
                     `,
-                    backgroundSize: "50px 50px",
+                    backgroundSize: isMobile ? "40px 40px" : "60px 60px",
+                    transform: "perspective(1000px) rotateX(60deg)",
                     maskImage: "linear-gradient(to top, rgba(0, 0, 0, 1), transparent)",
                     WebkitMaskImage: "linear-gradient(to top, rgba(0, 0, 0, 1), transparent)",
-                    willChange: "transform"
+                    willChange: isMobile ? "auto" : "transform",
+                    transition: "transform 0.1s linear"
                 }}
             />
-            {/* Cosmic Light Field */}
-            <canvas
-                ref={canvasRef}
-                style={{
-                    position: "absolute",
-                    top: 0, left: 0, width: "100%", height: "100%"
-                }}
-            />
+
+            {isMobile && (
+                <>
+                    <div style={{
+                        position: "absolute", top: "10%", left: "10%",
+                        width: "80vw", height: "80vw",
+                        background: "radial-gradient(circle, rgba(121, 40, 202, 0.08) 0%, transparent 70%)",
+                        filter: "blur(60px)"
+                    }} />
+                    <div style={{
+                        position: "absolute", bottom: "10%", right: "10%",
+                        width: "80vw", height: "80vw",
+                        background: "radial-gradient(circle, rgba(0, 245, 212, 0.08) 0%, transparent 70%)",
+                        filter: "blur(60px)"
+                    }} />
+                </>
+            )}
+
+            {!isMobile && (
+                <canvas
+                    ref={canvasRef}
+                    style={{
+                        position: "absolute",
+                        inset: 0,
+                        width: "100%",
+                        height: "100%"
+                    }}
+                />
+            )}
         </div>
     );
 }

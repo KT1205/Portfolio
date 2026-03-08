@@ -45,18 +45,7 @@ export default function GlobalTerminal() {
 
         switch (trimmed) {
             case "help":
-                response = [
-                    { text: "CORE SYSTEM COMMANDS:", type: "system" },
-                    { text: "  projects         Access deployment matrix", type: "system" },
-                    { text: "  experience       View system logs", type: "system" },
-                    { text: "  skills           Scan skill network", type: "system" },
-                    { text: "  certifications   View certification vault", type: "system" },
-                    { text: "  contact          Establish comms channel", type: "system" },
-                    { text: "---------------------------------------------", type: "system" },
-                    { text: "  resume           Access encrypted credentials", type: "system" },
-                    { text: "  clear            Wipe terminal history", type: "system" },
-                    { text: "  exit             Close terminal overlay", type: "system" },
-                ];
+                response = [{ text: "CORE_COMMAND_LIST", type: "system" }];
                 break;
             case "identity":
                 setActiveModule("CORE_IDENTITY");
@@ -77,6 +66,7 @@ export default function GlobalTerminal() {
                 break;
             case "certifications":
             case "certs":
+            case "vault":
                 setActiveModule("CERTIFICATION_VAULT");
                 response = [{ text: ">> ACCESSING SECURE VAULT...", type: "success" }];
                 break;
@@ -158,7 +148,26 @@ export default function GlobalTerminal() {
                             <div className={styles.historyList}>
                                 {history.map((line) => (
                                     <div key={line.id} className={`${styles.line} ${styles[line.type]}`}>
-                                        {line.text}
+                                        {line.text === "CORE_COMMAND_LIST" ? (
+                                            <div className={styles.commandGrid}>
+                                                {[
+                                                    { cmd: "identity", desc: "Access core profile module" },
+                                                    { cmd: "projects", desc: "Enter deployment matrix" },
+                                                    { cmd: "skills", desc: "Scan technician network" },
+                                                    { cmd: "experience", desc: "View historical logs" },
+                                                    { cmd: "vault", desc: "Access secure assets" },
+                                                    { cmd: "contact", desc: "Establish comms link" },
+                                                    { cmd: "resume", desc: "Decrypt credentials" },
+                                                    { cmd: "clear", desc: "Wipe terminal history" },
+                                                    { cmd: "exit", desc: "Close system overlay" },
+                                                ].map(c => (
+                                                    <div key={c.cmd} className={styles.commandRow}>
+                                                        <span className={styles.cmdKey}>{c.cmd.padEnd(12)}</span>
+                                                        <span className={styles.cmdDesc}>{c.desc}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : line.text}
                                     </div>
                                 ))}
                                 <div ref={bottomRef} />
