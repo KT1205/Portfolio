@@ -63,30 +63,37 @@
 @media (max-width: 640px) {
     .projectGrid {
         grid-template-columns: 1fr;
-        gap: 1.25rem;
+        gap: 2rem;
     }
 
     .nodeBox {
-        padding: 1.2rem;
+        padding: 1.75rem;
+        min-height: 125px;
+    }
+
+    .hoverBracket {
+        display: none;
     }
 }
 
 .nodeWrapper {
     position: relative;
     cursor: none;
-    /* Let custom cursor handle */
+    display: flex;
+    flex-direction: column;
 }
 
 .nodeBox {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--border-subtle);
     border-radius: 6px;
-    padding: 1.5rem;
+    padding: 2.2rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.2rem;
     transition: all 0.3s ease;
-    height: 100%;
+    flex: 1;
+    min-height: 125px;
     position: relative;
     overflow: hidden;
 }
