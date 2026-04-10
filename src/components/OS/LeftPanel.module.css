@@ -217,16 +217,21 @@
 }
 
 .mobileOverlay {
-    position: absolute;
-    bottom: 80px;
+    position: fixed;
+    bottom: 90px;
+    left: 0;
     right: 0;
+    margin: 0 auto;
     width: 300px;
+    max-width: calc(100vw - 3rem);
+    
     background: rgba(10, 10, 20, 0.95);
     border: 1px solid var(--accent-cyan);
     border-radius: 16px;
     padding: 1.5rem;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(20px);
+    z-index: 2000;
 }
 
 [data-theme='light'] .mobileOverlay {

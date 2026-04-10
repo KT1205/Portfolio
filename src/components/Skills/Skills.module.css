@@ -398,22 +398,79 @@
 }
 
 @media (max-width: 768px) {
+    .nexusSection {
+        padding: 0.5rem; /* Maximize usable space on mobile screens */
+    }
     .consoleFrame { border: none; }
     .consoleMain { flex-direction: column; }
+    .consoleHeader {
+        padding: 0.75rem 1rem;
+    }
+    .systemTag {
+        font-size: 0.55rem; /* Shrink to fit better */
+    }
+    .sessionMeta {
+        display: none; /* Hide ROOT_USER etc on mobile to save space */
+    }
     .subsystemRail {
         width: 100%;
-        height: 60px;
-        flex-direction: row;
-        overflow-x: auto;
+        height: auto;
         border-right: none;
         border-bottom: 1px solid var(--border-subtle);
+        display: block;
     }
     .railHeader, .railFooter { display: none; }
-    .railItems { display: flex; padding: 0; }
-    .railItem { width: auto; padding: 0 1.5rem; }
-    .activePointer { 
-        height: 3px; width: 50%; 
-        left: 25%; bottom: -1px; top: auto; right: auto; 
+    .railItems { 
+        display: flex; 
+        flex-direction: row;
+        justify-content: center; 
+        align-items: center;
+        padding: 0; 
+        gap: 0;
+        overflow-x: auto;
+        -ms-overflow-style: none;  
+        scrollbar-width: none;  
+        margin: 0 auto;
+        width: 100%;
+        /* Shift slightly left as per user request to counter perceived offset */
+        transform: translateX(-2px); 
     }
-    .consoleContent { padding: 1.5rem; }
+    .railItems::-webkit-scrollbar {
+        display: none;
+    }
+    .railItem { 
+        width: auto; 
+        padding: 1rem 1.25rem; 
+        flex-shrink: 0;
+        justify-content: center;
+        border-bottom: 2px solid transparent; 
+    }
+    .activePointer { 
+        /* Hide the absolute pointer on mobile */
+        display: none; 
+    }
+    .railActive {
+        /* Standard mobile active tab indicator */
+        border-bottom: 3px solid var(--accent-electric) !important;
+        background: transparent !important;
+    }
+    [data-theme='light'] .railActive {
+        /* Remove the weird side shadows and just rely on the bottom border */
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+    .consoleContent { 
+        padding: 1rem; 
+        overflow-x: hidden;
+    }
+    .contentHeader {
+        /* Stack the header text so PROGRAMMING doesn't overlap # MODULES */
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding-bottom: 1rem;
+    }
+    .catTitle {
+        font-size: 1.5rem; /* Scale down title for mobile */
+    }
 }
