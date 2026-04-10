@@ -1,0 +1,161 @@
+.statusBar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 30px;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    z-index: 1000;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    backdrop-filter: blur(10px);
+}
+
+[data-theme='light'] .statusBar {
+    /* Stone base — matches sidebar tone, frames the OS shell */
+    background: #E0DDD8;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    backdrop-filter: none;
+    color: var(--text-muted);
+}
+
+.statusGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.statusText {
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.dotOnline {
+    width: 6px;
+    height: 6px;
+    background: #00ffcc;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00ffcc;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.activeModuleIndicator {
+    color: var(--accent-purple);
+    font-weight: 600;
+}
+
+[data-theme='light'] .activeModuleIndicator {
+    color: var(--accent-purple);
+}
+
+.moduleName {
+    color: var(--accent-cyan);
+    animation: flicker 4s infinite alternate;
+}
+
+[data-theme='light'] .moduleName {
+    /* Teal status indicator — one of very few colored elements in the bar */
+    color: var(--accent-cyan);
+    animation: none;
+    font-weight: 600;
+}
+
+@keyframes flicker {
+    0% {
+        opacity: 1;
+    }
+
+    5% {
+        opacity: 0.8;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    52% {
+        opacity: 0.5;
+    }
+
+    54% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.clockText {
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
+
+[data-theme='light'] .clockText {
+    /* Teal time indicator — authoritative system data */
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
+
+.themeToggle {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0;
+    transition: color 0.3s ease;
+}
+
+.themeToggle:hover {
+    color: var(--text-main);
+}
+
+.themeText {
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
+
+.monitorIcon {
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    .hideMobile {
+        display: none;
+    }
+
+    .statusBar {
+        font-size: 0.55rem;
+    }
+}

@@ -1,0 +1,419 @@
+.nexusSection {
+    width: 100%;
+    height: 100%;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.consoleFrame {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border-radius: 4px;
+    position: relative;
+}
+
+[data-theme='light'] .consoleFrame {
+    /* Crisp white console — lifts dramatically from pearl canvas */
+    background: #FAFAF8;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.05),
+        0 8px 24px rgba(0, 0, 0, 0.07),
+        0 24px 48px rgba(0, 0, 0, 0.06),
+        0 1px 0 rgba(255, 255, 255, 1) inset;
+    backdrop-filter: none;
+}
+
+/* Console Header */
+.consoleHeader {
+    height: 40px;
+    background: rgba(0, 0, 0, 0.02);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
+
+[data-theme='light'] .consoleHeader {
+    /* Warm stone header bar — anchors the console frame */
+    background: #F0EDE7;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.systemIdentifier {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.statusLamp {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-electric);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--accent-electric);
+    animation: flash 2s infinite;
+}
+
+@keyframes flash {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.systemTag {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+}
+
+.sessionMeta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.divider {
+    opacity: 0.3;
+}
+
+/* Main Console Layout */
+.consoleMain {
+    flex-grow: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Subsystem Rail (Left Sidebar) */
+.subsystemRail {
+    width: 240px;
+    border-right: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.01);
+}
+
+[data-theme='light'] .subsystemRail {
+    /* Warm stone left rail — distinctly warmer/darker than white detail pane */
+    /* Creates strong left→right tonal gradient: stone | white */
+    background: #ECEAE5;
+    border-right: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.railHeader, .railFooter {
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+}
+
+.railHeader {
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.railFooter {
+    margin-top: auto;
+    border-top: 1px solid var(--border-subtle);
+    opacity: 0.5;
+}
+
+.railItems {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+}
+
+.railItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s ease;
+    position: relative;
+    border-bottom: 1px solid transparent;
+}
+
+.railItem:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme='light'] .railItem:hover {
+    /* Warm white lift — no blue at idle state */
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.railActive {
+    background: rgba(0, 102, 255, 0.04);
+}
+
+[data-theme='light'] .railActive {
+    /* White active panel + system blue left rule — 
+       Only accent in the entire sidebar — extremely readable */
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 3px 0 0 var(--accent-electric) inset;
+}
+
+.railNum {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--accent-electric);
+    opacity: 0.5;
+}
+
+.railLabel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.railCategory {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: 0.05em;
+}
+
+.railStatus {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+}
+
+.activePointer {
+    position: absolute;
+    right: -1px;
+    top: 25%;
+    height: 50%;
+    width: 3px;
+    background: var(--accent-electric);
+    box-shadow: 0 0 10px var(--accent-electric);
+}
+
+/* Detail Console (Right Panel) */
+.detailConsole {
+    flex-grow: 1;
+    background: var(--bg-card);
+    overflow-y: auto;
+}
+
+[data-theme='light'] .detailConsole {
+    /* Pure white detail pane — bright contrast to stone rail */
+    background: #FFFFFF;
+}
+
+.consoleContent {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.contentHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid var(--text-main);
+    padding-bottom: 1.5rem;
+}
+
+.catInfo {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.catMeta {
+    display: flex;
+    flex-direction: column;
+}
+
+.catTitle {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+}
+
+.catPath {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.7rem;
+    color: var(--accent-electric);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
+.moduleCount {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+/* Skill Grid */
+.skillGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.skillBlock {
+    padding: 1.5rem;
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: rgba(0, 0, 0, 0.01);
+    transition: all 0.3s ease;
+}
+
+[data-theme='light'] .skillBlock {
+    /* Engineered white skill card — individual depth within the detail pane */
+    background: #FFFFFF;
+    border-color: rgba(0, 0, 0, 0.07);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.04),
+        0 1px 4px rgba(0, 0, 0, 0.04),
+        0 1px 0 rgba(255, 255, 255, 1) inset;
+}
+
+.skillBlock:hover {
+    border-color: var(--text-main);
+}
+
+[data-theme='light'] .skillBlock:hover {
+    background: #FDFDFC;
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.05),
+        0 6px 16px rgba(0, 0, 0, 0.07),
+        0 1px 0 rgba(255, 255, 255, 1) inset;
+    transform: translateY(-2px);
+}
+
+.blockHead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.blockUid {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-weight: bold;
+}
+
+.activityIcon {
+    color: var(--accent-electric);
+    opacity: 0.6;
+}
+
+.blockBody {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.skillName {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.barContainer {
+    height: 6px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.barSegments {
+    display: flex;
+    gap: 2px;
+    height: 100%;
+}
+
+.barSegment {
+    flex-grow: 1;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.segActive {
+    background: var(--accent-electric);
+}
+
+.blockStatus {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.statusDot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-electric);
+    border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .subsystemRail {
+        width: 80px;
+    }
+    .railLabel { display: none; }
+    .railNum { font-size: 1.25rem; }
+    .skillGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .consoleFrame { border: none; }
+    .consoleMain { flex-direction: column; }
+    .subsystemRail {
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+    }
+    .railHeader, .railFooter { display: none; }
+    .railItems { display: flex; padding: 0; }
+    .railItem { width: auto; padding: 0 1.5rem; }
+    .activePointer { 
+        height: 3px; width: 50%; 
+        left: 25%; bottom: -1px; top: auto; right: auto; 
+    }
+    .consoleContent { padding: 1.5rem; }
+}

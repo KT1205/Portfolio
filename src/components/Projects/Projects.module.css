@@ -1,0 +1,431 @@
+.projectsSection {
+    padding-bottom: 2rem;
+    position: relative;
+    z-index: 5;
+}
+
+.headerRow {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.systemStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 195, 255, 0.05);
+    border: 1px solid rgba(0, 195, 255, 0.2);
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--accent-cyan);
+    font-weight: 500;
+}
+
+.pulseIndicator {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-cyan);
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+    75%, 100% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+.projectGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    position: relative;
+    z-index: 10;
+}
+
+.nodeWrapper {
+    position: relative;
+    cursor: none;
+    display: flex;
+}
+
+.nodeBox {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    border-radius: 2px;
+}
+
+.nodeWrapper:hover .nodeBox {
+    border-color: var(--accent-cyan);
+    background: var(--bg-card-hover);
+    transform: translateY(-5px);
+}
+
+.nodeHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.headerLine {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: var(--accent-purple);
+}
+
+.nodeIcon {
+    color: var(--accent-purple);
+    opacity: 0.8;
+}
+
+.nodeId {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+}
+
+.statusBadge {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.6rem;
+    color: var(--accent-cyan);
+    border: 1px solid rgba(0, 245, 212, 0.2);
+    padding: 0.1rem 0.4rem;
+    border-radius: 2px;
+}
+
+.contentBody {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.nodeTitle {
+    font-family: var(--font-heading);
+    color: var(--text-main);
+    font-size: 1.4rem;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.metaRow {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.metaLabel {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.6rem;
+    color: var(--accent-purple);
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+}
+
+.nodeTech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.nodeTech span {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.2rem 0.6rem;
+}
+
+.cardFooter {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.footerTag {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+.energyPulse {
+    width: 40px;
+    height: 2px;
+    background: var(--accent-cyan);
+    opacity: 0;
+    transition: all 0.4s ease;
+    transform: scaleX(0);
+    transform-origin: right;
+}
+
+.nodeWrapper:hover .energyPulse {
+    opacity: 1;
+    transform: scaleX(1);
+    box-shadow: 0 0 10px var(--accent-cyan);
+}
+
+/* Corner Brackets */
+.bracketTl, .bracketBr {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--accent-cyan);
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 11;
+    pointer-events: none;
+}
+
+.bracketTl { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+.bracketBr { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+
+.nodeWrapper:hover .bracketTl,
+.nodeWrapper:hover .bracketBr {
+    opacity: 0.8;
+}
+
+/* Modal System */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    backdrop-filter: blur(12px);
+    box-sizing: border-box;
+}
+
+[data-theme='dark'] .modalOverlay {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.modalContainer {
+    width: 100%;
+    max-width: 650px;
+    max-height: 85vh;
+    background: var(--bg-main);
+    border: 1px solid var(--accent-cyan);
+    border-radius: 4px;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--shadow-lg), 0 0 40px rgba(0, 245, 212, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.modalHeader {
+    padding: 1.5rem 2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px dashed var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modalStatus {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent-purple);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.closeBtn:hover {
+    color: var(--accent-cyan);
+    transform: rotate(90deg);
+}
+
+.modalContent {
+    padding: 3rem;
+}
+
+.modalTitle {
+    font-family: var(--font-heading);
+    color: var(--text-main);
+    font-size: 2.2rem;
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+}
+
+.modalSubtitle {
+    font-size: 1.1rem;
+    color: var(--accent-cyan);
+    margin: 0 0 2rem 0;
+    font-weight: 500;
+}
+
+.modalDesc {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin: 0 0 2.5rem 0;
+}
+
+.modalTech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 3rem;
+}
+
+.modalTechTag {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    color: var(--accent-purple);
+    border: 1px solid rgba(155, 81, 224, 0.3);
+    padding: 0.4rem 1rem;
+}
+
+.modalActions {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.actionBtnPrimary {
+    padding: 1rem 2rem;
+    background: rgba(0, 245, 212, 0.1);
+    color: var(--accent-cyan);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.actionBtnPrimary:hover {
+    background: var(--accent-cyan);
+    color: #000;
+}
+
+.iconBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.iconBtn:hover {
+    color: var(--text-main);
+}
+
+/* Architectural Pearl — Engineered White Cards */
+[data-theme='light'] .nodeBox {
+    /* Crisp white dossier surface — engineered panel aesthetic */
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    backdrop-filter: none;
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.04),    /* Ring border */
+        0 2px 6px rgba(0, 0, 0, 0.05),    /* Ambient lift */
+        0 8px 20px rgba(0, 0, 0, 0.06),   /* Diffuse shadow */
+        0 1px 0 rgba(255, 255, 255, 1) inset; /* Top edge highlight */
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme='light'] .nodeWrapper:hover .nodeBox {
+    /* Physical depth increase on hover — no color tinting */
+    background: #FEFEFE;
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.06),
+        0 6px 16px rgba(0, 0, 0, 0.08),
+        0 24px 48px rgba(0, 0, 0, 0.1),
+        0 1px 0 rgba(255, 255, 255, 1) inset;
+    transform: translateY(-6px);
+}
+
+[data-theme='light'] .nodeTitle {
+    color: var(--text-main);
+    font-weight: 800;
+}
+
+[data-theme='light'] .nodeTech span {
+    /* Stone-chip tags — neutral, not blue */
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    color: var(--text-dim);
+}
+
+[data-theme='light'] .modalContainer {
+    /* Near-white modal — elevated above the card layer */
+    background: #FDFDFC;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-top: 3px solid var(--accent-electric); /* System blue top rule */
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.05),
+        0 24px 48px rgba(0, 0, 0, 0.16),
+        0 48px 80px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='light'] .modalStatus {
+    color: var(--accent-electric);
+}
+
+[data-theme='light'] .headerLine {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light'] .bracketTl,
+[data-theme='light'] .bracketBr {
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 1200px) {
+    .projectGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .projectGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modalContent {
+        padding: 2rem;
+    }
+}

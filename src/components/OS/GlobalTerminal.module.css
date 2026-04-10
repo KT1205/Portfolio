@@ -1,0 +1,323 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 998;
+}
+
+.terminalWrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    /* transform handled by framer-motion */
+    width: 90%;
+    max-width: 700px;
+    height: 60vh;
+    min-height: 400px;
+    background: #0b0b0f;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    z-index: 999;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 245, 212, 0.05);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.terminalHeader {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    cursor: default;
+}
+
+.termDots {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.termDots button {
+    border: none;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+
+.termDots button:hover {
+    filter: brightness(1.2);
+}
+
+.dotRed {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ff5f56;
+}
+
+.dotYellow {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ffbd2e;
+}
+
+.dotGreen {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #27c93f;
+}
+
+.termTitle {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    opacity: 0.7;
+}
+
+.terminalWindow {
+    flex-grow: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    cursor: text;
+}
+
+.historyList {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.line {
+    word-break: break-all;
+    line-height: 1.4;
+    white-space: pre-wrap;
+}
+
+.user {
+    color: var(--text-main);
+    font-weight: bold;
+}
+
+.system {
+    color: var(--text-dim);
+}
+
+.error {
+    color: #ff5f56;
+}
+
+.link {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 5px rgba(0, 245, 212, 0.5);
+}
+
+.success {
+    color: #27c93f;
+}
+
+.inputRow {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.promptArrow {
+    color: var(--accent-cyan);
+    font-weight: bold;
+}
+
+.cmdInput {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    flex-grow: 1;
+    outline: none;
+    caret-color: transparent;
+    /* Hide native cursor for custom block cursor */
+}
+
+.cursorBlock {
+    width: 8px;
+    height: 1.2rem;
+    background: var(--accent-purple);
+    animation: blinkCursor 1s step-end infinite;
+    position: absolute;
+    left: calc(2ch + (1ch * var(--input-length, 0)));
+    /* dynamic fallback usually handled by JS or simple align */
+    pointer-events: none;
+}
+
+/* Fallback simple right-align cursor if input gets long */
+.cmdInput:focus+.cursorBlock {
+    left: auto;
+    right: 0;
+    opacity: 0;
+    /* Let native caret handle it if too complex, or keep simple block */
+}
+
+.commandGrid {
+    padding: 1rem;
+    background: rgba(0, 245, 212, 0.03);
+    border: 1px solid rgba(0, 245, 212, 0.1);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.commandRow {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.cmdKey {
+    color: var(--accent-cyan);
+    font-weight: bold;
+    min-width: 100px;
+}
+
+.cmdDesc {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 500px) {
+    .commandRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .cmdKey {
+        min-width: auto;
+    }
+}
+
+.cmdInput {
+    caret-color: var(--accent-purple);
+    /* Revert to standard caret for robust typing */
+}
+
+.cursorBlock {
+    display: none;
+    /* Hide custom block if using caret */
+}
+
+/* Let's construct a purely CSS trailing block cursor on focus-within if we can, 
+   otherwise native block caret is better via font */
+
+@keyframes blinkCursor {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+[data-theme='light'] .terminalWrapper {
+    background: #F4F2EE;  /* Warm cream — matches Architectural Pearl */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='light'] .terminalHeader {
+    background: #EAE7E1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* All terminal text — dark graphite on cream background */
+[data-theme='light'] .terminalWindow {
+    color: #2C2C2A;
+    background: #F4F2EE;
+}
+
+[data-theme='light'] .user {
+    color: #111110;
+}
+
+[data-theme='light'] .system {
+    color: #5A5850;
+}
+
+[data-theme='light'] .link {
+    color: #0277A8; /* Precision Teal accent */
+}
+
+[data-theme='light'] .success {
+    color: #166534; /* Deep green */
+}
+
+[data-theme='light'] .error {
+    color: #991B1B; /* Deep red */
+}
+
+[data-theme='light'] .promptArrow {
+    color: #1558D6; /* System Blue prompt */
+}
+
+[data-theme='light'] .cmdInput {
+    color: #111110;
+    caret-color: #1558D6;
+}
+
+[data-theme='light'] .termTitle {
+    color: #7A7672;
+}
+
+[data-theme='light'] .cmdKey {
+    color: #0277A8;
+}
+
+[data-theme='light'] .cmdDesc {
+    color: #5A5850;
+}
+
+[data-theme='light'] .commandGrid {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+
+@media (max-width: 1024px) {
+    .terminalWrapper {
+        width: 90%;
+    }
+}
+
+@media (max-width: 640px) {
+    .terminalWrapper {
+        width: 95vw;
+        height: 70vh;
+        min-height: auto;
+    }
+
+    .terminalWindow {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+}

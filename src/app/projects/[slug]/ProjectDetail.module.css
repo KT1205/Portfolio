@@ -1,0 +1,180 @@
+.container {
+    padding-top: 100px;
+    padding-bottom: 15rem;
+    /* Large padding to ensure bottom content clears any UI elements */
+    height: 100dvh;
+    /* Required to make overflow-y work inside hidden-overflow parent */
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    z-index: 10;
+    -webkit-overflow-scrolling: touch;
+}
+
+.backBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-bottom: 2rem;
+    transition: color 0.3s ease;
+}
+
+.backBtn:hover {
+    color: var(--accent-cyan);
+}
+
+.header {
+    margin-bottom: 4rem;
+}
+
+.title {
+    font-size: clamp(2.2rem, 8vw, 4rem);
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 1rem;
+    line-height: 1.1;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    color: var(--text-dim);
+    margin-bottom: 2rem;
+}
+
+.techStack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+.techTag {
+    background: var(--bg-card);
+    color: var(--accent-cyan);
+    padding: 0.6rem 1.4rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid var(--border-subtle);
+    font-family: 'Courier New', Courier, monospace;
+    text-transform: uppercase;
+}
+
+.links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.primaryBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg-card);
+    border: 1px solid var(--accent-cyan);
+    color: var(--accent-cyan);
+    padding: 0.6rem 1.4rem;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
+}
+
+.primaryBtn:hover {
+    background: var(--accent-cyan);
+    color: black;
+    box-shadow: 0 0 20px rgba(0, 245, 212, 0.4);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    margin-top: 3rem;
+    padding-bottom: 5rem;
+}
+
+.section {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 2.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+}
+
+.sectionTitle {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-purple);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.sectionTitle::before {
+    content: '>';
+    display: block;
+    color: var(--accent-purple);
+}
+
+.paragraph {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+}
+
+.list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.listItem {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-dim);
+    margin-bottom: 0.8rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.listItem::before {
+    content: '--';
+    color: var(--accent-cyan);
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.2rem;
+    }
+
+    .section {
+        padding: 1.5rem;
+    }
+
+    .links {
+        flex-direction: column;
+    }
+}
+
+.container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.container::-webkit-scrollbar-thumb {
+    background: var(--accent-cyan);
+    border-radius: 10px;
+}
