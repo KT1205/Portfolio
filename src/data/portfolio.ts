@@ -7,7 +7,7 @@ export const portfolioData = {
 
     // System Metrics
     systemMetrics: {
-        projectsBuilt: 5,
+        projectsBuilt: 3,
         techStacksUsed: 10,
         cgpa: "9.48 / 10",
         cgpaSemester: "As of Semester 6"
@@ -103,7 +103,7 @@ export const portfolioData = {
         },
         {
             category: "Web Development",
-            skills: ["HTML", "CSS", "React.js", "Next.js", "Node.js"]
+            skills: ["HTML", "CSS", "ReactJS", "NodeJS", "ExpressJS"]
         },
         {
             category: "Databases",
@@ -111,7 +111,7 @@ export const portfolioData = {
         },
         {
             category: "Ecosystem & Tools",
-            skills: ["GitHub", "VS Code", "Hardhat", "REST APIs"]
+            skills: ["GitHub", "VS Code"]
         }
     ],
 
